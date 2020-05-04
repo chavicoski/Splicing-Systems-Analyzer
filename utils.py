@@ -7,21 +7,19 @@ def get_max_firm_subwords(I, R):
         I -> List with the words to extract the maximal firm subwords
         R -> list of rules with the symbols where we make the splicing
     '''
-    max_firms = set()
+    max_firms = []
     for word in I:
         firm = ""
         for symbol in word:
             if symbol not in R:
                 firm += symbol
             else:
-                max_firms.add(firm)
+                max_firms.append(firm)
                 firm = ""
 
-        if firm != "":
-            max_firms.add(firm)
-            firm = ""
+        max_firms.append(firm)
 
-    return list(max_firms)
+    return max_firms
 
 
 if __name__ == "__main__":

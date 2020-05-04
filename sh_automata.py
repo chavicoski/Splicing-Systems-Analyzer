@@ -19,19 +19,53 @@ class SH_automata:
     This is the representation of the example 8 of the paper 
     "Recognition of Simple Splicing Systems using SH-Automaton".
     '''
-    def __init__(self, I, R):
+    def __init__(self, I, R, initial_state="s_0", final_state="s_f"):
+        '''
+        Constructor of the automata. It takes an syplicing system as input and
+        creates the automata tha accepts the language of the splicing system.
+        Params:
+            I -> list with the initial words of the system
+            R -> list with the words where the splicing is aplied 
+            initial_state -> name for the initial state
+            final_state -> name for the final state
+        '''
+        # Store the splicing system definition
         self.I = I
         self.R = R
-        self.states = R
-        
-        # Build the automata from the splicing system
-        max_firms = get_max_firm_subwords(I, R)
 
-        #### GET TRANSITIONS
-
-        self.transitions = transitions
+        # Create the states
         self.initial_state = initial_state
         self.final_state = final_state
+        self.states = set()
+        for state in [initial_state, final_state] + list(map(lambda x: f"s_{x}", R)):
+            self.add_state(state)
+
+        # Create transitions from the splicing system
+        self.build_transitions()
+
+
+    def build_transitions(self):
+        '''
+        Build the transitions of the automata from the initial words and rules of the
+        splicing system given as reference in the constructor
+        '''
+        self.transitions = {state: dict() for state in self.states}
+        for word in self.I:
+            current_state = self.initial_state 
+            firm = ""
+            for symbol in word:
+                if symbol not in self.R:
+                    firm += symbol
+                else:
+                    next_state = f"s_{symbol}"
+                    self.add_transition(current_state, next_state, firm)
+                    current_state = next_state
+                    firm = ""
+
+            # Handle the last firm of the word
+            if firm != "":
+                self.add_transition(current_state, self.final_state, firm)
+
 
     def add_state(self, state_name):
         ''' 
@@ -41,9 +75,9 @@ class SH_automata:
         '''
         if state_name not in self.states:
             self.states.add(state_name)
-            self.transitions[state_name] = dict()
         else:
             print(f"The state {state_name} allready exists")
+
 
     def add_transition(self, src, dst, word):
         '''
@@ -55,30 +89,51 @@ class SH_automata:
         '''
         if src in self.states:
             if dst in self.states:
-                self.transitions[src][word].append(dst)
+                self.transitions[src][word] = list(set(self.transitions[src].get(word, []) + [dst]))
             else:
                 print(f"The destination state {dst} of the transition doesn't exist")
         else:
             print(f"The source state {src} of the transition doesn't exist")
 
-    def check_word(self, word):
+
+    def __repr__(self):
+        '''
+        Function that returns the string representation of the automata
+        '''
+        res = ""
+        res += f"states: {self.states}\n"
+        res += f"initial state: {self.initial_state}\n"
+        res += f"final state: {self.final_state}\n"
+        res += "transitions: {\n"
+        for state, transitions in self.transitions.items():
+            res += f"\t{state}: {transitions}\n"
+        res += "\t}\n"
+        return res
+
+
+    def check_word(self, word, verbose=0):
         '''Return a boolean
         Checks if the given word belongs to the language of the SH-automata
         Params:
             word -> word string to check with the automata
         '''
         max_firms = get_max_firm_subwords([word], self.R)
+        if verbose: print(f"{word} max firms: {max_firms}")
         states_stack = [(self.initial_state, 0)]
         while True:
             try:
+                if verbose: print(f"states stack: {states_stack}")
                 current_state, firm_idx = states_stack.pop()
-                if current_state == self.final_state:
+                if current_state == self.final_state and firm_idx == len(max_firms):
                     return True
-                next_states = self.transitions[current_state].get(max_firms[firm_idx], [])  # It can have multiple states
-                if len(next_state) > 0:
-                    for state in next_states:
-                        states_stack.append((state, firm_idx+1))
-            except:
+                else:
+                    next_states = self.transitions[current_state].get(max_firms[firm_idx], [])  # It can have multiple states
+                    if verbose: print(f"From state {current_state} to states {next_states} with \"{max_firms[firm_idx]}\"")
+                    if len(next_states) > 0 and firm_idx < len(max_firms):
+                        for state in next_states:
+                            states_stack.append((state, firm_idx+1))
+            except Exception as e:
+                print(e)
                 break  # We have emptied the stack
 
         return False
