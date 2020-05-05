@@ -1,6 +1,3 @@
-from utils import get_max_firm_subwords
-
-
 class SH_automata:
     '''
     This implementation of this SH-automata follows this internal structure:
@@ -111,13 +108,36 @@ class SH_automata:
         return res
 
 
+    def get_max_firm_subwords(self, I, R):
+        '''Returns a list of strings
+        Given a list of words and a list of splicing rules finds the
+        maximal firm subwords and returns them in a list.
+        Params:
+            I -> List with the words to extract the maximal firm subwords
+            R -> list of rules with the symbols where we make the splicing
+        '''
+        max_firms = []
+        for word in I:
+            firm = ""
+            for symbol in word:
+                if symbol not in R:
+                    firm += symbol
+                else:
+                    max_firms.append(firm)
+                    firm = ""
+
+            max_firms.append(firm)
+
+        return max_firms
+
+
     def check_word(self, word, verbose=0):
         '''Return a boolean
         Checks if the given word belongs to the language of the SH-automata
         Params:
             word -> word string to check with the automata
         '''
-        max_firms = get_max_firm_subwords([word], self.R)
+        max_firms = self.get_max_firm_subwords([word], self.R)
         if verbose: print(f"{word} max firms: {max_firms}")
         states_stack = [(self.initial_state, 0)]
         while True:
@@ -126,6 +146,8 @@ class SH_automata:
                 current_state, firm_idx = states_stack.pop()
                 if current_state == self.final_state and firm_idx == len(max_firms):
                     return True
+                elif firm_idx == len(max_firms):
+                    continue
                 else:
                     next_states = self.transitions[current_state].get(max_firms[firm_idx], [])  # It can have multiple states
                     if verbose: print(f"From state {current_state} to states {next_states} with \"{max_firms[firm_idx]}\"")

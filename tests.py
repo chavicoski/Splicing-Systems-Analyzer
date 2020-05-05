@@ -1,49 +1,25 @@
-from sh_automata import SH_automata
+from utils import bcolors, pass_test
 
-'''
-print("\n#############\n# EXAMPLE 6 #\n#############\n")
+print(f"{bcolors.HEADER}\n#############\n# EXAMPLE 6 #\n#############\n{bcolors.ENDC}")
 I = ["aabaaaaabaaabaa"]
 R = ["b"]
 word = "aabaaabaaaaabaaaaabaaabaa"
-automata = SH_automata(I, R)
-print(f"I = {I}")
-print(f"R = {R}")
-print("Automata:")
-print(automata)
-print(f"\"{word}\" check: {automata.check_word(word, verbose=0)}")
-'''
+pass_test(I, R, word, expected_result=True, verbose=0)
 
-print("\n#############\n# EXAMPLE 7 #\n#############\n")
+print(f"{bcolors.HEADER}\n#############\n# EXAMPLE 7 #\n#############\n{bcolors.ENDC}")
 I = ["abaaabaaabaa", "aabaaaaabaaaaabaaaaa"]
 R = ["b"]
 word = "aabaaabaaabaaaaabaaaaa"
-automata = SH_automata(I, R)
-print(f"I = {I}")
-print(f"R = {R}")
-print("Automata:")
-print(automata)
-print(f"\"{word}\" check: {automata.check_word(word, verbose=1)}")
+pass_test(I, R, word, expected_result=True, verbose=0)
 
-'''
-print("\n#############\n# EXAMPLE 8 #\n#############\n")
+print(f"{bcolors.HEADER}\n#############\n# EXAMPLE 8 #\n#############\n{bcolors.ENDC}")
 I = ["abaacaaaaaba", "abaaabaaacaaba"]
 R = ["b", "c"]
 word = "abaaabaacaabaaacaaaaaba"
-automata = SH_automata(I, R)
-print(f"I = {I}")
-print(f"R = {R}")
-print("Automata:")
-print(automata)
-print(f"\"{word}\" check: {automata.check_word(word, verbose=0)}")
+pass_test(I, R, word, expected_result=True, verbose=0)
 
-print("\n#############\n# EXAMPLE 9 #\n#############\n")
+print(f"{bcolors.HEADER}\n#############\n# EXAMPLE 9 #\n#############\n{bcolors.ENDC}")
 I = ["abaaabbaabbba"]
 R = ["b"]
 word = "abaaabbbbbbaabaaabbba"
-automata = SH_automata(I, R)
-print(f"I = {I}")
-print(f"R = {R}")
-print("Automata:")
-print(automata)
-print(f"\"{word}\" check: {automata.check_word(word, verbose=0)}")
-'''
+pass_test(I, R, word, expected_result=True, verbose=0)
