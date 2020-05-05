@@ -138,24 +138,29 @@ class SH_automata:
             word -> word string to check with the automata
         '''
         max_firms = self.get_max_firm_subwords([word], self.R)
-        if verbose: print(f"{word} max firms: {max_firms}")
+        if verbose: print(f"\"{word}\" max firms: {max_firms}")
+        # Stack for being able to explore all the possibilities in DFS
         states_stack = [(self.initial_state, 0)]
         while True:
             try:
                 if verbose: print(f"states stack: {states_stack}")
+                # Get current state of the automata and next max firm to process
                 current_state, firm_idx = states_stack.pop()
-                if current_state == self.final_state and firm_idx == len(max_firms):
+                # If the current state is the final and we processed all the firms
+                if current_state == self.final_state and firm_idx == len(max_firms): 
                     return True
+                # If the current state is not final and there are no more firms left
                 elif firm_idx == len(max_firms):
                     continue
                 else:
-                    next_states = self.transitions[current_state].get(max_firms[firm_idx], [])  # It can have multiple states
+                    # Get list of possible next states
+                    next_states = self.transitions[current_state].get(max_firms[firm_idx], [])
                     if verbose: print(f"From state {current_state} to states {next_states} with \"{max_firms[firm_idx]}\"")
-                    if len(next_states) > 0 and firm_idx < len(max_firms):
+                    if len(next_states) > 0:
+                        # Store in the stack the states to explore with the corresponding max firm
                         for state in next_states:
                             states_stack.append((state, firm_idx+1))
-            except Exception as e:
-                print(e)
+            except:
                 break  # We have emptied the stack
 
         return False
