@@ -1,4 +1,4 @@
-class SH_automata:
+class SH_automata_firms:
     '''
     This implementation of this SH-automata follows this internal structure:
     For I=["abaacaaaaaba", "abaaabaaacaaba"] and R=["b", "c"]
@@ -102,7 +102,7 @@ class SH_automata:
         res += f"initial state: {self.initial_state}\n"
         res += f"final state: {self.final_state}\n"
         res += "transitions: {\n"
-        for state, transitions in self.transitions.items():
+        for state, transitions in sorted(self.transitions.items(), key=lambda x: x[0]):
             res += f"\t{state}: {transitions}\n"
         res += "\t}\n"
         return res
