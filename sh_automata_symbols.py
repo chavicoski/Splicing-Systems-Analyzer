@@ -24,7 +24,7 @@ class SH_automata_symbols:
     This is the representation of the example 8 of the paper 
     "Recognition of Simple Splicing Systems using SH-Automaton".
     '''
-    def __init__(self, I, R, initial_state="s_0", final_state="s_f"):
+    def __init__(self, I, R, initial_state="s_0"):
         '''
         Constructor of the automata. It takes an syplicing system as input and
         creates the automata tha accepts the language of the splicing system.
@@ -32,7 +32,6 @@ class SH_automata_symbols:
             I -> list with the initial words of the system
             R -> list with the words where the splicing is aplied 
             initial_state -> name for the initial state
-            final_state -> name for the final state
         '''
         # Store the splicing system definition
         self.I = I
