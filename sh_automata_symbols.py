@@ -145,8 +145,3 @@ class SH_automata_symbols:
                 break  # We have emptied the stack
 
         return False
-
-if __name__ == "__main__":
-    automata = SH_automata_symbols(["abaacaaaaaba", "abaaabaaacaaba"], ["b", "c"])
-    print(automata)
-    print(automata.check_word("abaaacaabaaaba"))
