@@ -4,8 +4,8 @@ class SH_automata_symbols:
     For I=["abaacaaaaaba", "abaaabaaacaaba"] and R=["b", "c"]
 
     states = {'s_b', 's_caaaaa', 's_0', 's_c', 's_ca', 's_ba', 's_baa', 's_caaaa', 's_caa', 's_baaa', 's_caaa', 's_0a'}
-    initial state = s_0
-    final state = {'s_ba'}
+    initial_state = s_0
+    final_states = {'s_ba'}
     transitions = {
 	s_0: {'a': ['s_0a']}
 	s_0a: {'b': ['s_b']}
@@ -42,7 +42,7 @@ class SH_automata_symbols:
         self.final_states = set()
         self.states = {self.initial_state}
 
-        # Create transitions from the splicing system
+        # Build the automata from the splicing system
         self.build_transitions_and_states()
 
 
