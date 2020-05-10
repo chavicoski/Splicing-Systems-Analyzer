@@ -33,7 +33,7 @@ def pass_test(automata, I, R, word, expected_result, verbose=1):
     '''
     if automata == 1:
         automata = SH_automata_firms(I, R)
-    if automata == 2:
+    elif automata == 2:
         automata = SH_automata_symbols(I, R)
     else:
         print(f"The automata {automata} is not valid")
